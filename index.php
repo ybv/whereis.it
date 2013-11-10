@@ -5,10 +5,7 @@
 <link href="http://www.jqueryscript.net/css/top.css" rel="stylesheet" type="text/css">
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<link rel='stylesheet' href='jquery-colorbox/colorbox.css' type='text/css' media='screen' />
-<script type='text/javascript' src='jquery-colorbox/jquery.colorbox-min.js'></script>
-<link rel='stylesheet' href='../css/jquery.justifiedgallery.min.css' type='text/css' media='all' />
-<script type='text/javascript' src='../js/jquery.justifiedgallery.min.js'></script>
+
 </head>
 
 </script>
@@ -17,31 +14,31 @@
 <style type="text/css">
   .example-description { margin: 20px 0 20px 0;}
   #myExample3 {
-
       line-height: 0;
       z-index: 0;
-   -webkit-column-count: 6;
-   -webkit-column-gap:   1px;
-   -moz-column-count:    6;
-   -moz-column-gap:      1px;
-   column-count:         6;
-   column-gap:           1px;
+   -webkit-column-count: 4;
+   -webkit-column-gap:   3px;
+   -moz-column-count:    4;
+   -moz-column-gap:      3px;
+   column-count:         4;
+   column-gap:           3px;
   }
+
   #imgs{
    width: 100%;
   height: auto;
   }
+
   @media (max-width: 1200px) {
   #myExample3 {
-  -moz-column-count:    5;
-  -webkit-column-count: 7;
-  column-count:         5;
+  -moz-column-count:    4;
+  -webkit-column-count: 4;
+  column-count:         4;
   }
+
 }
 
-#myExample3 img:hover:after{
-content: attr(title);
-}
+
 #where{
     position: absolute;
     z-index: 90;
@@ -59,7 +56,6 @@ content: attr(title);
  function onld(){
   $.getJSON('template_c.js', function(data) {
 
-
           for (var i in data.pages) {
             var curr = data.pages[i];
             var id1 = curr.id;
@@ -68,7 +64,6 @@ content: attr(title);
             var img_link = curr.image_link;
             data2+= "<a href=\""+ pagel+"\" title=\""+location1+"\"> <img id =\"imgs\" src=\""+img_link+"\"  /></a>";
             //document.getElementById("myExample3").innerHTML+=data2;
-
    }
     document.getElementById("myExample3").innerHTML =data2;
     //document.getElementById("myExample3").innerHTML=data;
