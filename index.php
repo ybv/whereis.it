@@ -1,128 +1,139 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <title>Multi-Level Backbone Image Gallery</title>
-        <link rel="stylesheet" href="gallery.css" type="text/css" media="screen" charset="utf-8" />
-        <link rel="stylesheet" href="shadows.css" type="text/css" media="screen" charset="utf-8" />
-		<link rel="stylesheet" href="buttons.css" type="text/css" media="screen" charset="utf-8" />
+<!DOCTYPE html><head>
+<title>Justified Gallery Example</title>
 
-                
-                <script id="indexTmpl" type="text/x-jquery-tmpl">
-                <div class="item drop-shadow round">
-                 <div class="item-image">
-                     <a href="#subalbum/${cid}"><img src="${attributes.image}" alt="${attributes.title}" /></a>
-                 </div>
-                 <div class="item-artist">${attributes.artist}</div>
-                    <div class="item-title">${attributes.title}</div>
-                    <div class="item-years">${attributes.years}</div>
-                </div>
-                </script>
-				
-			
-				<script id="subindexTmpl" type="text/x-jquery-tmpl">
-                <div class="item  drop-shadow round">
-                 <div class="item-image subalbum">
-                     <a href="#subalbum/${subalbum}/${attributes.pid}"><img src="${attributes.image}" alt="${attributes.title}" alt="No images in this folder"/></a> 
-                 </div>
-                 <div class="item-artist">${attributes.artist}</div>
-                    <div class="item-title">${attributes.title}</div>
-                    <div class="item-price">$${attributes.price}</div>
-                </div>
-	
-                </script>
-				
-     
-                <script id="itemTmpl" type="text/x-jquery-tmpl">
-                <div class="item-detail">
-                  <div class="item-image drop-shadow round"><img src="${attributes.large_image}" alt="${attributes.title}" /></div>
-                  <div class="item-info">
-                    <div class="item-artist">${attributes.artist}</div>
-                    <div class="item-title">${attributes.title}</div>
-                    <div class="item-price">$${attributes.price}</div>
-					<br />
-                    <div class="item-link"><a href="${attributes.url}" class="button">Buy this item</a></div>
-                    <div class="back-link"><a href="#" class="button">&laquo; Back to Albums</a></div>
-                  </div>
-                </div>
-                </script>
+<link href="http://www.jqueryscript.net/css/top.css" rel="stylesheet" type="text/css">
 
-    </head>
-    <body>
-        <div id="container">
-            <div id="header">
-                <h1>
-                    <a href="index.php">Multi-Level Backbone Gallery</a>
-                </h1>
-                <h3>Created by Addy Osmani for 'Building Single-page Apps With jQuery's Best Friends'</h3>
-            </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<link rel='stylesheet' href='jquery-colorbox/colorbox.css' type='text/css' media='screen' />
+<script type='text/javascript' src='jquery-colorbox/jquery.colorbox-min.js'></script>
+<link rel='stylesheet' href='../css/jquery.justifiedgallery.min.css' type='text/css' media='all' />
+<script type='text/javascript' src='../js/jquery.justifiedgallery.min.js'></script>
+</head>
 
-            <div id="main">
-                 <div class="jstest">This application is running with JavaScript turned off.</div>
-            </div>
-        </div>
-        <script src="LAB.min.js" type="text/javascript"></script>
-
-        
-<?
+</script>
 
 
-//PHP fallback to enable graceful degredation
+<style type="text/css">
+  .example-description { margin: 20px 0 20px 0;}
+  #myExample3 {
 
-
-//feel free to substitute with a more secure read-in method
-$json = file_get_contents("data/album1.json");
-$json_a=json_decode($json,true);
-$folderType = $_GET['view'];
-$index = $_GET['ind'];
-$subal = $_GET['subalbum'];
-$subalbums = array();
-$i =0; $j =0;
-error_reporting(0);
-
-//expose convenient access to subalbums
-foreach ($json_a as $p => $k){
-    foreach($k["subalbum"] as $sub){ 
-		 $subalbums[$i][$j] = $sub;
-         $j++;
-	}
-	$i++;
-} 
-
-//handle 'view' switching
-switch($folderType){
-	case "subalbum":
-		echo "<ul class='gallery'>";
-		 foreach($subalbums[$index] as $sub){
-		  echo "<li class='item drop-shadow round'><a href='"  . $sub['large_image'] . "'><img src='" . $sub['image'] . "'></img>" .  $sub['title']  . "</a> " . $sub['artist'] ." </li>";
-	 
-		  } 
-		echo "</ul>";	    
-	break;
-	
-	default:
-	    $ind = 0;
-		echo "<ul class='gallery'>";
-		foreach($json_a as $p => $k){
-		   echo "<li class='item drop-shadow round'><a href='index.php?view=subalbum&ind=$ind'><img src='" . $k['image'] . "'></img>" .  $k['title']  . "</a> " . $k['years'] ." </li>";
-		   $ind++;
-		}
-		echo "</ul>";
-	break;
+      line-height: 0;
+      z-index: 0;
+   -webkit-column-count: 6;
+   -webkit-column-gap:   1px;
+   -moz-column-count:    6;
+   -moz-column-gap:      1px;
+   column-count:         6;
+   column-gap:           1px;
+  }
+  #imgs{
+   width: 100%;
+  height: auto;
+  }
+  @media (max-width: 1200px) {
+  #myExample3 {
+  -moz-column-count:    5;
+  -webkit-column-count: 7;
+  column-count:         5;
+  }
 }
 
+#myExample3 img:hover:after{
+content: attr(title);
+}
+#where{
+    position: absolute;
+    z-index: 90;
+    width:350px;
+    height:11%;
+    bottom:50px;
+    right: 20px;
+    padding:0px 20px;
+    background: rgba(255, 255, 255, 0.9);
+}
+</style>
+<script type="text/javascript">
 
-?>
-        <script type="text/javascript">
-		   $LAB
-		   .script("jquery-1.4.4.min.js").wait()
-		   .script("jquery.tmpl.min.js")
-		   .script("underscore-min.js")
-		   .script("backbone-min.js")
-		   .script("cacheprovider.js").wait()
-		   .script("gallery.js");      
-        </script>
-    </body>
+  var data2="";
+ function onld(){
+  $.getJSON('template_c.js', function(data) {
+
+
+          for (var i in data.pages) {
+            var curr = data.pages[i];
+            var id1 = curr.id;
+            var pagel = id1+".html";
+            var location1 = curr.location;
+            var img_link = curr.image_link;
+            data2+= "<a href=\""+ pagel+"\" title=\""+location1+"\"> <img id =\"imgs\" src=\""+img_link+"\"  /></a>";
+            //document.getElementById("myExample3").innerHTML+=data2;
+
+   }
+    document.getElementById("myExample3").innerHTML =data2;
+    //document.getElementById("myExample3").innerHTML=data;
+  });
+
+  };
+
+ 
+</script>
+
+
+
+<body onload="onld();">
+<a href="#" >
+    <img src="img/WHEREISIT.png" id="where" onload="this.width/=2;"/>
+  </a>
+<div id="myExample3" >
+<a href="photos/7822678460_ee98ff1f69_b.jpg" id="imgs"title="Erice">
+    <img alt="Erice" src="photos/7822678460_ee98ff1f69_m.jpg" />
+  </a>
+  <a href="photos/7302459122_19fa1d8223_b.jpg" id="imgs"title="Truthful Innocence">
+    <img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+  </a>
+  <a href="photos/7822678460_ee98ff1f69_b.jpg" id="imgs"title="Erice">
+    <img alt="Erice" src="photos/7822678460_ee98ff1f69_m.jpg" />
+  </a>
+  <a href="photos/7302459122_19fa1d8223_b.jpg" id="imgs"title="Truthful Innocence">
+    <img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
+  </a>
+  <a href="photos/7222046648_5bf70e893a_b.jpg" id="imgs" title="Simply my Brother">
+    <img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
+  </a>
+  <a href="photos/7002395006_29fdc85f7a_b.jpg" id="imgs" title="Freedom">
+    <img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
+  </a>
+  <a href="photos/7062575651_b23918b11a_b.jpg" id="imgs" title="Maybe spring">
+    <img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
+  </a>
+  <a href="photos/6883704844_1580a8c3b7_b.jpg"  id="imgs"title="Black & White">
+    <img alt="Black & White" src="photos/6883704844_1580a8c3b7_m.jpg" />
+  </a>
+  <a href="photos/6841267340_855273fd7e_b.jpg"id="imgs" title="Love">
+    <img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
+  </a>
+  </div>
+
+
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+
+</body>
 </html>
