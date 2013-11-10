@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
+<link rel="stylesheet" href="bootstrap-switch.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="bootstrap-switch.js"></script>  
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script>
+  function onld(){
+  $.getJSON('template_c.js', function(data) {
+    var path = window.location.pathname;
+    var page = path.substr( path.lastIndexOf("/") + 1 );
+    var page2 = page.replace(".html","");
+
+          for (var i in data.pages) {
+        if(page2==data.pages[i].id){
+              var curr = data.pages[i];
+              var location = curr.location;//todo
+              var source = curr.source;//todo
+              var lat = curr.lat_long[0];
+              var longi = curr.lat_long[1];
+              var season_from = curr.best_season[0];
+              var season_to = curr.best_season[1];
+              var s_link = curr.source_link;
+              var img_link = curr.image_link;
+              var weather_link= curr.weather_link;
+              var weather_current_type = curr.weather_current_type;
+              var weather_current_now = curr.weather_current_now;
+              var weather_today_high= curr.weather_today_high;
+              var weather_today_low=curr.weather_today_low;
+              var nearby_place1_name= curr.nearby_place1_name;
+              var nearby_place1_url = curr.nearby_place1_url;
+              var nearby_place2_name = curr.nearby_place2_name;
+              var nearby_place2_url= curr.nearby_place2_url;
+              var nearby_place3_name =curr.nearby_place3_name;
+              var nearby_place3_url= curr.nearby_place3_url;
+              var hotel1_name= curr.hotel1_name;
+              var hotel1_url = curr.hotel1_url;
+              var hotel2_name= curr.hotel2_name;
+              var hotel2_url= curr.hotel2_url;
+              var hotel3_name=  curr.hotel3_name;
+              var hotel3_url= curr.hotel3_url;
+              var wikipedia_url= curr.wikipedia_url;
+              var wikitravel_url= curr.wikitravel_url;
+              var wiki_text= curr.wiki_text;
+              initialize(lat, longi);
+              var weather_mod = weather_current_now + "&#176" +"C";
+              document.getElementById("weather").innerHTML=weather_mod;
+              document.getElementById("weather").href= weather_link;
+              var loww="Low: "+weather_today_low;
+              document.getElementById("low").innerHTML= loww;
+              var highw=" High: "+weather_today_high;
+              document.getElementById("high").innerHTML= highw;
+              document.getElementById("cond").innerHTML = weather_current_type;
+              document.getElementById("imageb").src = img_link;
+              document.getElementById("loc_title").innerHTML= location;
+              document.getElementById("source_img").href= source_img;
+              document.getElementById("source").href= s_link;
+              document.getElementById("source").innerHTML= source;
+              document.getElementById("wiki_text").innerHTML=wiki_text;
+              if(nearby_place1_name!=null){
+                var pl1= "<a style=\"color:white\" href="+nearby_place1_url+" >"+ nearby_place1_name + "</a>";
+                 $("ul").append(pl1);
+              }
+
+              if(nearby_place2_name!=null){
+                 var pl2= "<br/><a style=\"color:white\" href="+nearby_place2_url+" >"+ nearby_place2_name + "</a>";
+                 $("ul").append(pl2);
+              }
+              if(nearby_place3_name!=null){
+                   var pl3= "<br/><a style=\"color:white\" href="+nearby_place3_url+" >"+ nearby_place3_name + "</a>";
+                 $("ul").append(pl3);
+              }
+              if(nearby_place3_name==null && nearby_place1_name==null && nearby_place3_name==null){
+                 $("ul").append("<li>Nothing to display</li>");
+              }
+               if(hotel1_name!=null){
+                var pl1= "<a style=\"color:white\" href="+hotel1_url+" >"+ hotel1_name + "</a>";
+                 $("dl").append(pl1);
+              }
+
+              if(hotel2_name!=null){
+                 var pl2= "<br/><a style=\"color:white\" href="+hotel2_url+" >"+ hotel2_name + "</a>";
+                 $("dl").append(pl2);
+              }
+              if(hotel3_name!=null){
+                   var pl3= "<br/><a style=\"color:white\" href="+hotel3_url+" >"+ hotel3_name + "</a>";
+                 $("dl").append(pl3);
+              }
+              if(hotel3_name==null && hotel2_name==null && hotel1_name==null){
+                 $("dl").append("<dt>Nothing to display</dt>");
+              }
+        }
+        
+    }
+  });
+
+  };
+  function initialize(lat,longi) {
+    var mapOptions = {
+            center: new google.maps.LatLng(lat,longi),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            zoom: 11
+          };     
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+}; 
+
+function toggle(button)
+{
+  if(document.getElementById("btn").innerHTML=="View Image"){
+   document.getElementById("btn").innerHTML="View Map";
+   $('#imageb').show();
+    
+}
+
+  else{
+   document.getElementById("btn").innerHTML="View Image";
+    $('#imageb').hide();
+  }
+   
+}
+
+    </script>
+   
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" >
+  
+ <style type="text/css">
+          html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px; overflow:hidden; }
+  #container { position:relative;width: 100%; height: 100% }
+  
+  #map { width: 100%; height: 100% }
+  #imageb {z-index: 1; width: 100%; height: 100%;
+    min-height:100%;
+    background-position: no-repeat center center;
+    background-size:cover; }
+  #btn {
+    z-index: 50; position: absolute;
+    
+    top:600px;
+    left:70px;
+    font-size: 12px;
+    background-color: transparent;
+    font-family: HelveticaNeue-UltraLight;
+    color: #fff;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none; 
+    }
+ 
+    
+   #weathercontainer {
+    box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
+    position: absolute;
+    z-index: 90;
+    width:300px;
+    height:12%;
+    top:15px;
+    float: below;
+    overflow:scroll;
+    right: 70px;
+    padding:0px 20px;
+    background: rgba(20, 25, 10, 0.5);
+   font-family: HelveticaNeue-Thin;
+    }
+
+   #high {
+    font-family: HelveticaNeue-UltraLight;
+    font-size: 100%;
+    color: white;
+    position: absolute;
+    top: 13px;
+    left: 230px;
+
+    }
+    #low {
+    font-family: HelveticaNeue-UltraLight;
+    font-size: 100%;
+    color: white;
+   position: absolute;
+    top: 13px;
+    left: 180px;
+    }
+    #cond{
+        font-family: HelveticaNeue-UltraLight;
+    font-size: 120%;
+    color: white;
+    position: absolute;
+    top: 40px;
+    left: 180px;
+    }
+
+    #lefmidcontainer {
+      position: absolute;
+      background-attachment: fixed;
+      box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
+    top:110px;
+    right: 70px;
+    overflow:scroll;
+    height: auto;
+    width: 300px;
+    background: rgba(20, 25, 10, 0.5);
+    font-size: 16px;
+    padding-left:  10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    font-family: HelveticaNeue-Light;
+    }
+    #weather{
+
+    font-family: HelveticaNeue-UltraLight;
+    font-size: 400%;
+    color: white;
+    float: left;
+    }
+    #source_img{
+    z-index: 50; position: absolute;
+    float:left;
+    top: 600px;
+    left: 140px;
+    font-size: 12px;
+    background-color: transparent;
+    font-family: HelveticaNeue-UltraLight;
+    color: #fff;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none; 
+    }
+     #source{
+    z-index: 50; position: absolute;
+    float:left;
+    top: 600px;
+    left: 225px;
+    font-size: 12px;
+    font-family: HelveticaNeue-UltraLight;
+    color: #fff;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none; 
+    }
+     #loc_title{
+    z-index: 50; position: absolute;
+    float:left;
+    top: 560px;
+    left: 70px;
+    font-size: 30px;
+    font-family: HelveticaNeue-Light;
+    color: #fff;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none; 
+    }
+     #popularplacestitle {
+    color: white;
+    background: rgba(225, 225, 225, 0.1);
+    top: 5px;
+    font-family: HelveticaNeue-Light;
+    font-size: 18px;
+
+    }
+    .unl{
+      font-family: HelveticaNeue-UltraLight;
+      font-size: 14px;
+      margin-left: -1px;
+    }
+    #wiki_text{
+    z-index: 50; position: absolute;
+    float:left;
+    top: 620px;
+    left: 70px;
+    right: 70px;
+    font-size: 18px;
+    background: rgba(20, 25, 10, 0.5);
+    font-family: HelveticaNeue-UltraLight;
+    color: #fff;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none; 
+    }
+    
+ </style>
+
+</head>
+
+
+<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+
+<body onload="onld();">
+ 
+    <div id="container">
+
+    <p id ="loc_title" > </p>
+    <p id ="wiki_text" > </p>
+      <a id="btn" href="#" onclick="toggle(this);">Change View</a>
+      <p id="source_img" >&#124 Image Source : </p>
+       <a id ="source" href="#"></a>
+         <img src="http://static.pictorymag.com/pictories/nz_snow_ed_jpg_998x2828_q85.jpg" id="imageb" />
+
+  
+        <div id="map"></div>
+
+          <div id="weathercontainer">
+          <a href="#" id= "weather">
+     
+         </a>
+         <div id="low" style="color:white">
+       
+        </div>
+          <div id="high" style="color:white">
+     
+        </div>
+          <div id="cond" style="color:white">
+       
+        </div>
+   </div>
+
+          <div id="lefmidcontainer">
+          <p id= "popularplacestitle"> Popular places around
+          <ul class="unl" style="color:white"></ul>
+          </p>
+
+
+          <p id= "popularplacestitle"> Nearby hotels
+          <dl class="unl" style="color:white"></dl>
+          </p>
+
+   </div>
+        
+    </div>
+  
+   </div>
+     
+</body>
+
+</html>
