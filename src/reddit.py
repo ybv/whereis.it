@@ -9,9 +9,9 @@ import random
 import re
 import nltk
 from bs4 import BeautifulSoup
+from geopy import geocoders
 
-subreddit_list=["earthporn"]
-                #,"winterporn","autumnporn","cityporn","villageporn","abandonedporn","ruralporn"]
+subreddit_list=["earthporn","winterporn","autumnporn","cityporn","villageporn","abandonedporn","ruralporn"]
 
 for subreddit_name in subreddit_list:
     top_json=commands.getstatusoutput('curl -s http://www.reddit.com/r/'+subreddit_name+'/.json?limit=100')
@@ -33,12 +33,19 @@ for subreddit_name in subreddit_list:
                 temp_url=temp_url_splits[0]+"/"+temp_url_splits[1]+"/"+temp_url_splits[2]+"/"+temp_url_splits[3]+"/"+temp_url_splits[4]+"/"+temp_url_splits[5]+"/"+ "sizes/l/in/photostream/"
                 flickr_html=commands.getstatusoutput('curl -s '+temp_url)[1]
                 flickr_soup = BeautifulSoup(flickr_html)
+                if flickr_html=="" :
+                    temp_url=temp_url_splits[0]+"/"+temp_url_splits[1]+"/"+temp_url_splits[2]+"/"+temp_url_splits[3]+"/"+temp_url_splits[4]+"/"+temp_url_splits[5]+"/"+ "sizes/z/in/photostream/"
+                    flickr_html=commands.getstatusoutput('curl -s '+temp_url)[1]
+                    flickr_soup = BeautifulSoup(flickr_html)
                 temp_dict_item['url']=flickr_soup.find(id="allsizes-photo").img['src']         
             elif(top_json_dict['data']['children'][image_json_index]['data']['domain'].strip()=='500px.com'):
                 temp_url=top_json_dict['data']['children'][image_json_index]['data']['url'].strip()
                 fivepx_html=commands.getstatusoutput('curl -s '+temp_url)[1]
                 fivepx_soup = BeautifulSoup(fivepx_html)
-                print flickr_soup.find_all('div')
+                img_list=fivepx_soup.find_all('img')
+                for img_tag in img_list:
+                    if(img_tag.has_attr("data-protect")):
+                        temp_dict_item['url']=img_tag['src']
             else:
                 temp_dict_item['url']=top_json_dict['data']['children'][image_json_index]['data']['url'].strip()
             #removing unwanted characters from the title and striping every thing after the square bracket for proper region extraction
@@ -46,6 +53,7 @@ for subreddit_name in subreddit_list:
             temp_dict_item['title']=re.sub(r'\..*','',re.sub(r'[0-9]*','',temp))
             new_image_dict[temp_dict_item['key']]=temp_dict_item
     
+    #print new_image_dict
     
     location_dict={}
     for image_dict_index in new_image_dict.iterkeys():
@@ -58,7 +66,15 @@ for subreddit_name in subreddit_list:
             else:
                 tempstring=""
         tempstring.rstrip(" ")
-        location_dict[new_image_dict[image_dict_index]['key']]=re.sub(r'.,.',',',tempstring)
-    
-    #print len(location_dict)
-    #print location_dict
+        #location_dict[new_image_dict[image_dict_index]['key']]=re.sub(r'.,.',',',tempstring)
+        g = geocoders.GoogleV3()
+        #g = geocoders.MediaWiki("http://wiki.case.edu/%s") 
+        #g = geocoders.SemanticMediaWiki("http://wiki.case.edu/%s",attributes=['Coordinates'],relations=['Located in'])
+        try:
+            place, (lat, lng) = g.geocode(re.sub(r'.,.',',',tempstring))    
+            print "%s: %.5f, %.5f" % (place, lat, lng)
+            location_dict[new_image_dict[image_dict_index]['key']]={'place':place, 'lat':lat, 'lng':lng}
+        except:
+            pass
+    print len(location_dict)
+    print location_dict
