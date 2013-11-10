@@ -86,33 +86,7 @@ content: attr(title);
     <img src="img/WHEREISIT.png" id="where" onload="this.width/=2;"/>
   </a>
 <div id="myExample3" >
-<a href="photos/7822678460_ee98ff1f69_b.jpg" id="imgs"title="Erice">
-    <img alt="Erice" src="photos/7822678460_ee98ff1f69_m.jpg" />
-  </a>
-  <a href="photos/7302459122_19fa1d8223_b.jpg" id="imgs"title="Truthful Innocence">
-    <img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
-  </a>
-  <a href="photos/7822678460_ee98ff1f69_b.jpg" id="imgs"title="Erice">
-    <img alt="Erice" src="photos/7822678460_ee98ff1f69_m.jpg" />
-  </a>
-  <a href="photos/7302459122_19fa1d8223_b.jpg" id="imgs"title="Truthful Innocence">
-    <img alt="Truthful Innocence" src="photos/7302459122_19fa1d8223_m.jpg" />
-  </a>
-  <a href="photos/7222046648_5bf70e893a_b.jpg" id="imgs" title="Simply my Brother">
-    <img alt="Simply my Brother" src="photos/7222046648_5bf70e893a_m.jpg" />
-  </a>
-  <a href="photos/7002395006_29fdc85f7a_b.jpg" id="imgs" title="Freedom">
-    <img alt="Freedom" src="photos/7002395006_29fdc85f7a_m.jpg" />
-  </a>
-  <a href="photos/7062575651_b23918b11a_b.jpg" id="imgs" title="Maybe spring">
-    <img alt="Maybe spring" src="photos/7062575651_b23918b11a_m.jpg" />
-  </a>
-  <a href="photos/6883704844_1580a8c3b7_b.jpg"  id="imgs"title="Black & White">
-    <img alt="Black & White" src="photos/6883704844_1580a8c3b7_m.jpg" />
-  </a>
-  <a href="photos/6841267340_855273fd7e_b.jpg"id="imgs" title="Love">
-    <img alt="Love" src="photos/6841267340_855273fd7e_m.jpg" />
-  </a>
+
   </div>
 
 
