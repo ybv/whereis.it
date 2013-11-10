@@ -1,6 +1,6 @@
 
 <!DOCTYPE html><head>
-<title>Justified Gallery Example</title>
+<title>Whereis.it?</title>
 
 <link href="http://www.jqueryscript.net/css/top.css" rel="stylesheet" type="text/css">
 
