@@ -5,25 +5,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
         <title>Where is it?</title>
-      
                
     </head>
     <body>
-        <div id="container">
-            <div id="header">
-                <h1>
-                    <a href="index.php">Multi-Level Backbone Gallery</a>
-                </h1>
-                <h3>Created by Addy Osmani for 'Building Single-page Apps With jQuery's Best Friends'</h3>
-            </div>
 
-            <div id="main">
-                 <div class="jstest">This application is running with JavaScript turned off.</div>
-            </div>
-        </div>
-        <script src="LAB.min.js" type="text/javascript"></script>
-
-        
+        <script src="LAB.min.js" type="text/javascript"></script>        
 <?
 
 
@@ -35,7 +21,6 @@ $json = file_get_contents("data/album1.json");
 $json_a=json_decode($json,true);
 $folderType = $_GET['view'];
 $index = $_GET['ind'];
-$subal = $_GET['subalbum'];
 $subalbums = array();
 $i =0; $j =0;
 error_reporting(0);
@@ -50,19 +35,16 @@ foreach ($json_a as $p => $k){
 } 
 
 //handle 'view' switching
-switch($folderType){
-      
+
+echo "<ul class='gallery'>";
+foreach($subalbums[$index] as $sub){
+echo "<li class='item drop-shadow round'><a href='"  . $sub['large_image'] . "'><img src='" . $sub['image'] . "'></img>" .  $sub['title']  . "</a> " . $sub['artist'] ." </li>";
+ } 
+echo "</ul>";            
+
         
-        default:
-            $ind = 0;
-                echo "<ul class='gallery'>";
-                foreach($json_a as $p => $k){
-                   echo "<li class='item drop-shadow round'><a href='index.php?view=subalbum&ind=$ind'><img src='" . $k['image'] . "'></img>" .  $k['title']  . "</a> " . $k['years'] ." </li>";
-                   $ind++;
-                }
-                echo "</ul>";
-        break;
-}
+ 
+
 
 
 ?>

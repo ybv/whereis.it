@@ -55,13 +55,19 @@
               document.getElementById("low").innerHTML= loww;
               var highw=" High: "+weather_today_high;
               document.getElementById("high").innerHTML= highw;
-              document.getElementById("cond").innerHTML = weather_current_type;
+              document.getElementById("cond").innerHTML= weather_current_type;
               document.getElementById("imageb").src = img_link;
               document.getElementById("loc_title").innerHTML= location;
               document.getElementById("source_img").href= source_img;
               document.getElementById("source").href= s_link;
-              document.getElementById("source").innerHTML= source;
+              if(wikitravel_url!=null && wikipedia_url!=null){
+              document.getElementById("Wiki_travel").href= wikitravel_url;
+              document.getElementById("Wikipedia").href= wikipedia_url;
+              document.getElementById("Wiki_travel").innerHTML= "| Wiki Travel";
+              document.getElementById("Wikipedia").innerHTML= "| Wikipedia";
+              }document.getElementById("source").innerHTML= source;
               document.getElementById("wiki_text").innerHTML=wiki_text;
+              
               if(nearby_place1_name!=null){
                 var pl1= "<a style=\"color:white\" href="+nearby_place1_url+" >"+ nearby_place1_name + "</a>";
                  $("ul").append(pl1);
@@ -121,10 +127,27 @@ function toggle(button)
    document.getElementById("btn").innerHTML="View Image";
     $('#imageb').hide();
   }
-   
+  if ($('#imageb').is(":hidden")) {
+     document.getElementById("loc_title").style.color="black";
+     document.getElementById("source_img").style.color="black";
+     document.getElementById("source").style.color="black";
+     document.getElementById("btn").style.color="black";
+     document.getElementById("Wikipedia").style.color="black";
+     document.getElementById("Wiki_travel").style.color="black";
+     
+ }else{
+  document.getElementById("loc_title").style.color="white";
+  document.getElementById("source_img").style.color="white";
+     document.getElementById("source").style.color="white";
+     document.getElementById("btn").style.color="white";
+     document.getElementById("Wikipedia").style.color="white";
+     document.getElementById("Wiki_travel").style.color="white";
+ }
+  
 }
 
     </script>
+  
    
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" >
   
@@ -145,7 +168,7 @@ function toggle(button)
     left:70px;
     font-size: 12px;
     background-color: transparent;
-    font-family: HelveticaNeue-UltraLight;
+    font-family: HelveticaNeue-Light;
     color: #fff;
     padding: 3px 10px;
     cursor: pointer;
@@ -170,7 +193,7 @@ function toggle(button)
     }
 
    #high {
-    font-family: HelveticaNeue-UltraLight;
+    font-family: HelveticaNeue-Thin;
     font-size: 100%;
     color: white;
     position: absolute;
@@ -179,7 +202,7 @@ function toggle(button)
 
     }
     #low {
-    font-family: HelveticaNeue-UltraLight;
+    font-family: HelveticaNeue-Thin;
     font-size: 100%;
     color: white;
    position: absolute;
@@ -187,7 +210,7 @@ function toggle(button)
     left: 180px;
     }
     #cond{
-        font-family: HelveticaNeue-UltraLight;
+        font-family: HelveticaNeue-Thin;
     font-size: 120%;
     color: white;
     position: absolute;
@@ -222,10 +245,10 @@ function toggle(button)
     z-index: 50; position: absolute;
     float:left;
     top: 600px;
-    left: 140px;
+    left: 130px;
     font-size: 12px;
     background-color: transparent;
-    font-family: HelveticaNeue-UltraLight;
+    font-family: HelveticaNeue-Light;
     color: #fff;
     padding: 3px 10px;
     cursor: pointer;
@@ -236,9 +259,9 @@ function toggle(button)
     z-index: 50; position: absolute;
     float:left;
     top: 600px;
-    left: 225px;
+    left: 140px;
     font-size: 12px;
-    font-family: HelveticaNeue-UltraLight;
+    font-family: HelveticaNeue-Light;
     color: #fff;
     padding: 3px 10px;
     cursor: pointer;
@@ -272,19 +295,55 @@ function toggle(button)
       margin-left: -1px;
     }
     #wiki_text{
+    box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
     z-index: 50; position: absolute;
     float:left;
     top: 620px;
-    left: 70px;
-    right: 70px;
+    left: 75px;
+    right: 75px;
     font-size: 18px;
     background: rgba(20, 25, 10, 0.5);
-    font-family: HelveticaNeue-UltraLight;
+    font-family: HelveticaNeue-Thin;
     color: #fff;
     padding: 3px 10px;
     cursor: pointer;
     text-decoration: none;
     border: none; 
+    }
+     #Wiki_travel{
+    z-index: 50; position: absolute;
+    float:left;
+    top: 600px;
+    left: 170px;
+    font-size: 12px;
+    font-family: HelveticaNeue-Light;
+    color: #fff;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none; 
+    }
+    #Wikipedia{
+    z-index: 50; position: absolute;
+    float:left;
+    top: 600px;
+    left: 240px;
+    font-size: 12px;
+    font-family: HelveticaNeue-Light;
+    color: #fff;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none; 
+    }
+     #logo2{
+    z-index: 50; position: absolute;
+    float:left;
+    top: 20px;
+    left: 20px;
+    border: none; 
+    opacity: 0.3;
+    
     }
     
  </style>
@@ -297,11 +356,14 @@ function toggle(button)
 <body onload="onld();">
  
     <div id="container">
-
+      <img src="img/newlogo2.png" id="logo2" onload="this.width/=2;"/>
     <p id ="loc_title" > </p>
-    <p id ="wiki_text" > </p>
-      <a id="btn" href="#" onclick="toggle(this);">Change View</a>
-      <p id="source_img" >&#124 Image Source : </p>
+    <p id ="wiki_text" > 
+    </p>
+      <a id="btn" onclick="toggle(this);">View Map</a>
+      <p id="source_img" >&#124 </p>
+      <a href="#" id="Wiki_travel"></a>  
+      <a href="#" id="Wikipedia" ></a>
        <a id ="source" href="#"></a>
          <img src="http://static.pictorymag.com/pictories/nz_snow_ed_jpg_998x2828_q85.jpg" id="imageb" />
 
@@ -319,8 +381,8 @@ function toggle(button)
      
         </div>
           <div id="cond" style="color:white">
+          </div>
        
-        </div>
    </div>
 
           <div id="lefmidcontainer">
