@@ -11,12 +11,16 @@ import nltk
 from bs4 import BeautifulSoup
 from geopy import geocoders
 import pickle
-import  pywapi
 import string
+import unicodedata
+import foursquare
+
 
 subreddit_list=["earthporn","winterporn","autumnporn","cityporn","villageporn","abandonedporn","ruralporn"]
 
 tot_location_dict={}
+tot_new_image_dict={}
+fullname_location_dict={}
 for subreddit_name in subreddit_list:
     top_json=commands.getstatusoutput('curl -s http://www.reddit.com/r/'+subreddit_name+'/.json?limit=100')
     #loading the json as the dict of dict of list of dicts
@@ -56,7 +60,8 @@ for subreddit_name in subreddit_list:
             temp=re.sub(r'\[.*','',top_json_dict['data']['children'][image_json_index]['data']['title'].strip())
             temp_dict_item['title']=re.sub(r'\..*','',re.sub(r'[0-9]*','',temp))
             new_image_dict[temp_dict_item['key']]=temp_dict_item
-    
+            tot_new_image_dict[temp_dict_item['key']]=temp_dict_item
+    		
     #print new_image_dict
     
     location_dict={}
@@ -80,6 +85,8 @@ for subreddit_name in subreddit_list:
             print "%s: %.5f, %.5f" % (place, lat, lng) 
             location_dict[new_image_dict[image_dict_index]['key']]={'place':place.split(',')[0], 'lat':lat, 'lng':lng}
             tot_location_dict[new_image_dict[image_dict_index]['key']]={'place':place.split(',')[0], 'lat':lat, 'lng':lng}
+            fullname_location_dict[new_image_dict[image_dict_index]['key']]={'place':place, 'lat':lat, 'lng':lng}
+            
         except:
             pass
             '''
@@ -91,18 +98,31 @@ for subreddit_name in subreddit_list:
         else:
             location_json=commands.getstatusoutput('curl -s http://api.wunderground.com/api/8e3075e464747f3c/geolookup/q/'+str(lat)+','+str(lng)+'.json')
             location_json_dict=json.loads(location_json[1])
+		            
+            #weather_json=commands.getstatusoutput('curl -s http://api.openweathermap.org/data/2.5/weather?q='+location_json_dict['location']['city'])
+            #weather_json_dict=json.loads(weather_json[1])
+            #print weather_json_dict
+            #print "status : "+weather_json_dict["weather"][0]['main']
+            #print "temp : "+str((float(weather_json_dict["main"]['temp'])-32)*(float(5)/9))
+            #print "temp min : "+str((float(weather_json_dict["main"]['temp_min'])-32)*(float(5)/9))
+            #print "temp max: "+str((float(weather_json_dict["main"]['temp_max'])-32)*(float(5)/9))
             
-            weather_json=commands.getstatusoutput('curl -s http://api.openweathermap.org/data/2.5/weather?q='+location_json_dict['location']['city'])
-            weather_json_dict=json.loads(location_json[1])
-            print "status : "+weather_json_dict["weather"][0]['main']
-            print "temp : "+((weather_json_dict["main"]['temp']-32)*(5/9))
-            print "temp min : "+((weather_json_dict["main"]['temp_min']-32)*(5/9))
-            print "temp max: "+((weather_json_dict["main"]['temp_max']-32)*(5/9))
-            
-            
-    print len(location_dict)
-    print location_dict
-    
-#loc_file=open("/home/kaushal/Downloads/location.wit",'w')
-#pickle.dump(tot_location_dict,loc_file)
+    #print len(location_dict)
+    #print location_dict
+
+with open("/home/tj/Dropbox/pg/py/whereis.it/src/location1.pickle", 'w') as f:
+    pickle.dump([tot_location_dict, fullname_location_dict, tot_new_image_dict], f)
+
+#
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
